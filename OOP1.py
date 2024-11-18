@@ -24,6 +24,19 @@ class Student:
         for grades in self.grades.values():
             total_grades.extend(grades)
         return sum(total_grades) / len(total_grades) if total_grades else 0
+
+    def __str__(self):
+        return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.average_grade():.1f}\nКурсы в процессе изучения: {", ".join(self.courses_in_progress)}\nЗавершенные курсы: {", ".join(self.finished_courses)}'
+
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            raise TypeError("Можно сравнивать только объекты типа Student")
+        return self.average_grade() < other.average_grade()
+
+    def __eq__(self, other):
+        if not isinstance(other, Student):
+            raise TypeError("Можно сравнивать только объекты типа Student")
+        return self.average_grade() == other.average_grade()
         
 class Mentor:
     def __init__(self, name, surname):
@@ -51,6 +64,19 @@ class Lecturer(Mentor):
             total_grades.extend(grades)
         return sum(total_grades) / len(total_grades) if total_grades else 0
 
+    def __str__(self):
+        return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_grade():.1f}'
+
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            raise TypeError("Можно сравнивать только объекты типа Lecturer")
+        return self.average_grade() < other.average_grade()
+
+    def __eq__(self, other):
+        if not isinstance(other, Lecturer):
+            raise TypeError("Можно сравнивать только объекты типа Lecturer")
+        return self.average_grade() == other.average_grade()
+
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
@@ -63,6 +89,9 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return 'Ошибка'
+
+    def __str__(self):
+        return f'Имя: {self.name}\nФамилия: {self.surname}'
  
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
