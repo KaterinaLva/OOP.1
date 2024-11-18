@@ -6,6 +6,24 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
+
+    def add_courses(self, course):
+        self.courses_in_progress.append(course)
+
+    def rate_lecturer(self, lecturer, course, grade):
+        if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached:
+            if course in lecturer.grades:
+                lecturer.grades[course] += [grade]
+            else:
+                lecturer.grades[course] = [grade]
+        else:
+            return 'Ошибка'
+
+    def average_grade(self):
+        total_grades = []
+        for grades in self.grades.values():
+            total_grades.extend(grades)
+        return sum(total_grades) / len(total_grades) if total_grades else 0
         
 class Mentor:
     def __init__(self, name, surname):
@@ -18,9 +36,33 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.grades = {}
 
+    def rate_student(self, student, course, grade):
+        if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
+            if course in student.grades:
+                student.grades[course] += [grade]
+            else:
+                student.grades[course] = [grade]
+        else:
+            return 'Ошибка'
+
+    def average_grade(self):
+        total_grades = []
+        for grades in self.grades.values():
+            total_grades.extend(grades)
+        return sum(total_grades) / len(total_grades) if total_grades else 0
+
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
+
+    def rate_hw(self, student, course, grade):
+        if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
+            if course in student.grades:
+                student.grades[course] += [grade]
+            else:
+                student.grades[course] = [grade]
+        else:
+            return 'Ошибка'
  
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
